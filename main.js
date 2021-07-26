@@ -61,3 +61,21 @@ function composeBookObject(bookTitle, bookAuthor, bookYear, bookCompleted) {
         bookCompleted,
     };
 }
+
+function refreshDataFromTodos() {
+   const listUncompleted = document.getElementById(UNCOMPLETED_BOOK_SHELF_ID);
+   let listCompleted = document.getElementById(COMPLETED_BOOK_SHELF_ID);
+
+
+   for(book of books){
+       const newBook = makeTodo(book.bookTitle, book.bookAuthor, book.bookYear);
+       newBook[ID_BOOK] = book.id;
+
+
+       if(book.isCompleted){
+           listCompleted.append(newBook);
+       } else {
+           listUncompleted.append(newBook);
+       }
+   }
+}
