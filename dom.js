@@ -58,7 +58,7 @@ function addBook() {
     books.push(bookObject);
 
     if (bookCompleted.checked) {
-      incompleteBookshelfList.append(book);
+      completeBookshelfList.append(book);
     } else {
       incompleteBookshelfList.append(book);
     }
@@ -78,17 +78,24 @@ function makeBook(title, author, year,isComplete) {
     const bookYear = document.createElement("p");
     bookYear.innerText = year;
 
-    const bookContainer = document.createElement("div");
-    bookContainer.classList.add("item", "shadow");
-    bookContainer.append(bookTitle, bookAuthor, bookYear);
+    const button = document.createElement("div");
+    button.classList.add("action");
+
+    const bookContainer=document.createElement("article");
+    bookContainer.classList.add("book_item")
+    bookContainer.append(bookTitle,bookYear,bookAuthor);
 
     if(isComplete){
-        bookContainer.append(createTrashButton(),
+        button.append(createTrashButton(),
         createUndoButton());
+        bookContainer.append(button);
     } else {
-        bookContainer.append(createFinishButton(),
+        button.append(createFinishButton(),
           createTrashButton());
+          bookContainer.append(button);
     }
+    // bookContainer.append(button);
+
     return bookContainer;
 }
 
@@ -105,19 +112,20 @@ function createButton(buttonTypeClass , eventListener,buttonText) {
 
 function addBookToCompleted(taskElement) {
   const listCompleted = document.getElementById(COMPLETED_BOOK_SHELF_ID);
-  const bookTitle = taskElement.querySelectorAll(".inner > h3").innerText;
-  const bookAuthor = taskElement.querySelectorAll(".inner > p").innerText;
-  const bookYear = taskElement.querySelectorAll(".inner > p").innerText;
+   taskElement = taskElement.parentNode;
+  const bookTitle = taskElement.querySelectorAll(".book_item > h3").innerText;
+  const bookAuthor = taskElement.querySelectorAll(".book_item > p").innerText;
+  const bookYear = taskElement.querySelectorAll(".book_item > p").innerText;
 
   const newBook = makeBook(bookTitle, bookAuthor,bookYear,true);
-  // const book =findBook(taskElement[BOOK_ITEMID]);
-  // book.isCompleted=true;
-  // newBook[BOOK_ITEMID]=book.id;
+  const book =findBook(taskElement[ID_BOOK]);
+  book.isCompleted=true;
+  newBook[ID_BOOK]=book.id;
 
   listCompleted.append(newBook);
   taskElement.remove();
 
-  // updateDataStorage();
+  updateDataToStorage();
 }
 
 
@@ -128,11 +136,12 @@ function removeBookFromCompleted(taskElement) {
 
 function undoBookFromCompleted(taskElement) {
   const listUncompleted = document.getElementById(UNCOMPLETED_BOOK_SHELF_ID);
-  const bookTitle = taskElement.querySelectorAll(".inner > h3").innerText;
-  const bookAuthor = taskElement.querySelectorAll(".inner > p").innerText;
-  const bookYear = taskElement.querySelectorAll(".inner > p").innerText;
+   taskElement = taskElement.parentNode;
+  const bookTitle = taskElement.querySelectorAll(".book_item > h3").innerText;
+  const bookAuthor = taskElement.querySelectorAll(".book_item > p").innerText;
+  const bookYear = taskElement.querySelectorAll(".book_item > p").innerText;
 
-  const newBook = makeBook(bookTitle, bookAuthor,bookYear,false);
+  const newBook = makeBook(bookTitle, bookAuthor,bookYear,true);
 
   listUncompleted.append(newBook);
   taskElement.remove();
@@ -150,7 +159,7 @@ function createFinishButton() {
   return createButton(
     "green",
     function (event) {
-      addBookToCompleted(event.target.parentElement.parentElement);
+      addBookToCompleted(event.target.parentElement);
     },
     "Selesai dibaca"
   );
@@ -160,7 +169,7 @@ function createUndoButton() {
   return createButton(
     "blue",
     function (event) {
-      undoBookFromCompleted(event.target.parentElement.parentElement);
+      undoBookFromCompleted(event.target.parentElement);
     },
     "Baca Kembali"
   );

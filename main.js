@@ -11,7 +11,7 @@ function isStorageExist() /* boolean */ {
 }
 
 function saveBook() {
-   const parsed = JSON.stringify(todos);
+   const parsed = JSON.stringify(books);
    localStorage.setItem(STORAGE_KEY, parsed);
    document.dispatchEvent(new Event("onbooksaved"));
 }
@@ -22,7 +22,7 @@ function loadDataFromStorage() {
    let data = JSON.parse(serializedData);
 
    if(data !== null)
-       todos = data;
+       books = data;
 
    document.dispatchEvent(new Event("onbookloaded"));
 }
@@ -32,7 +32,7 @@ function updateDataToStorage() {
        saveBook();
 }
 
-function findTodo(bookId) {
+function findBook(bookId) {
    for(book of books){
        if(book.id === bookId)
            return book;
@@ -40,7 +40,7 @@ function findTodo(bookId) {
    return null;
 }
 
-function findTodoIndex(bookId) {
+function findBookIndex(bookId) {
    let index = 0
    for (book of books) {
        if(book.id === bookId)
@@ -52,12 +52,12 @@ function findTodoIndex(bookId) {
    return -1;
 }
 
-function composeBookObject(title, author, year, isComplete) {
+function composeBookObject(bookTitle, bookAuthor, bookYear, bookCompleted) {
     return {
         id: +new Date(),
-        title,
-        author,
-        year,
-        isComplete,
+        bookTitle,
+        bookAuthor,
+        bookYear,
+        bookCompleted,
     };
 }
