@@ -47,15 +47,22 @@ function addBook() {
     //         false,
     //     );
 
-        book[ID_BOOK] = bookObject.id;
-        books.push(bookObject);
 
         uncompletedBookList.append(book);
         updateDataToStorage();
 
     }
     const book = makeBook(bookTitle, bookAuthor, bookYear,bookCompleted);
-    incompleteBookshelfList.append(book);
+    const bookObject = composeBookObject(bookTitle, bookAuthor, bookYear, false);
+    book[ID_BOOK] = bookObject.id;
+    books.push(bookObject);
+
+    if (bookCompleted.checked) {
+      incompleteBookshelfList.append(book);
+    } else {
+      incompleteBookshelfList.append(book);
+    }
+    updateDataToStorage();
 
 }
 
@@ -134,7 +141,7 @@ function undoBookFromCompleted(taskElement) {
 
 function createTrashButton() {
     return createButton("red", function(event){
-        removeBookFromCompleted(event.target.parentElement);
+        removeBookFromCompleted(event.target.parentElement.parentElement);
     },"Hapus Buku");
 }
 
